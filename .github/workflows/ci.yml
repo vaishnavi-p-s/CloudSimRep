@@ -2,27 +2,32 @@ name: Java CloudSim CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Check out code
       uses: actions/checkout@v3
 
-    - name: Set up JDK 8
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        distribution: 'adoptopenjdk'
-        java-version: '8'
+        java-version: '11'  # Use the JDK version you need (e.g., 11, 17, etc.)
+        distribution: 'adoptium'  # Correct distribution name
+
+    - name: Add JARs to classpath
+      run: echo $JAVA_HOME
 
     - name: Compile Java files with CloudSim JARs
-      run: |
-        mkdir -p out
-        javac -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" -d out $(find . -name "*.java")
+      run: javac -cp "cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" -d . *.java
 
-    - name: Run Main class
-      run: |
-        java -cp "out:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" Main
+    - name: Run CloudSim Simulation
+      run: java -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" Main
+
