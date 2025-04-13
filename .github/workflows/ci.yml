@@ -1,0 +1,27 @@
+name: Java CloudSim CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+
+    - name: Compile Java files
+      run: |
+        javac -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar:json-simple-1.1.1.jar" *.java
+
+    - name: Run Simulation
+      run: |
+        java -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar:json-simple-1.1.1.jar" VMScheduler
