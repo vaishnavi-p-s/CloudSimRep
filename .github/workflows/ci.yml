@@ -19,14 +19,17 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '11'  # Use the JDK version you need (e.g., 11, 17, etc.)
+        java-version: '11'  # You can change this to a different version if needed
         distribution: 'temurin'  # OpenJDK distribution
 
-    - name: Set classpath for CloudSim JARs
+    - name: Verify Java installation
+      run: java -version
+
+    - name: Set CloudSim classpath
       run: echo "CLASSPATH=$(pwd)/cloudsim-3.0.3.jar:$(pwd)/commons-math3-3.6.1.jar" >> $GITHUB_ENV
 
     - name: Compile Java files with CloudSim JARs
-      run: javac -cp "$CLASSPATH" -d . *.java
+      run: javac -cp "$CLASSPATH" -d . $(find . -name "*.java")
 
     - name: Run CloudSim Simulation
       run: java -cp "$CLASSPATH:." Main
