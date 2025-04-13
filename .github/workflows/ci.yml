@@ -2,28 +2,27 @@ name: Java CloudSim CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Compile Java files with CloudSim JARs
-        run: |
-          mkdir -p bin
-          javac -cp ".:cloudsim-3.0.3.jar:cloudsim-examples.jar:cloudsim-core.jar" -d bin *.java
+    - name: Compile Java files with CloudSim JARs
+      run: |
+        mkdir -p out
+        javac -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" -d out $(find . -name "*.java")
 
-      - name: Run main class
-        run: java -cp "bin:.:cloudsim-3.0.3.jar:cloudsim-examples.jar:cloudsim-core.jar" Main
+    - name: Run Main class
+      run: |
+        java -cp "out:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" Main
