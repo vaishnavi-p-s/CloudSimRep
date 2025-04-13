@@ -19,8 +19,8 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '11'  # Use the JDK version you need (e.g., 11, 17, etc.)
-        distribution: 'adoptopenjdk'  # Change to adoptopenjdk
+        java-version: '11'  # You can use 11, 17, or another version you prefer
+        distribution: 'temurin'  # This is the updated distribution
 
     - name: Add JARs to classpath
       run: echo $JAVA_HOME
@@ -30,5 +30,6 @@ jobs:
 
     - name: Run CloudSim Simulation
       run: java -cp ".:cloudsim-3.0.3.jar:commons-math3-3.6.1.jar" Main
+
 
 
